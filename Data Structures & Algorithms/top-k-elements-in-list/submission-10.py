@@ -1,0 +1,29 @@
+"""
+
+bucket sort is an algorithm that sorts based on a backing store being able to contain the entire sort space, inserting elements positionally based on this, and them utilising them based on this.
+
+"""
+from collections import defaultdict
+
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        freq_map = defaultdict(lambda: 0)
+
+        highest = 0
+        for num in nums:
+            cur = freq_map[num] + 1 
+            freq_map[num] = cur
+            if cur > highest:
+                highest = cur
+        
+        freq_list = [[] for i in range(highest)]
+        for num, freq in freq_map.items():
+            freq_list[freq - 1].append(num)
+        
+        output = []
+        while highest > 0 and len(output) < k:
+            current = freq_list[highest - 1]
+            if len(current) != 0:
+                output += current
+            highest -= 1
+        return output[:k]
